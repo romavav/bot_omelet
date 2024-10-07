@@ -145,7 +145,6 @@ function continueRecipe(recipe) {
     const userId = ctx.from.id;
 
     if (userStates[userId]) {
-      // Устанавливаем шаг на 0 (первый шаг)
       userStates[userId].step = 0;
 
       await ctx.reply(
@@ -170,12 +169,10 @@ function setupIngredients() {
     const userId = ctx.from.id;
 
     if (userStates[userId]) {
-      // Получаем текущий рецепт
       const currentRecipeName = userStates[userId].currentRecipe;
 
       let ingredientsList;
 
-      // Сопоставляем имя рецепта с списком ингредиентов
       if (currentRecipeName === firstRecipe) {
         ingredientsList = firstIngredients;
       } else if (currentRecipeName === secondRecipe) {
@@ -183,7 +180,7 @@ function setupIngredients() {
       } else if (currentRecipeName === thirdRecipe) {
         ingredientsList = thirdIngredients;
       } else {
-        ingredientsList = []; // Убедитесь, что по умолчанию это массив
+        ingredientsList = []; 
       }
 
       if (Array.isArray(ingredientsList)) {
@@ -211,8 +208,8 @@ function setupRecipeHandler(recipeArray, recipeName) {
     const userId = ctx.from.id;
     userStates[userId] = {
       step: 0,
-      currentRecipe: recipeArray, // Сохраняем сам массив, но нам нужно имя
-      currentRecipeName: recipeName, // Сохраняем имя рецепта для использования в функции ингредиентов
+      currentRecipe: recipeArray, 
+      currentRecipeName: recipeName, 
     };
 
     await ctx.reply(recipeArray[userStates[userId].step], {
@@ -247,7 +244,6 @@ bot.hears("Готово ✅", async (ctx) => {
         }
       );
     } else {
-      // На последнем шаге показываем кнопку "Завершить 🎉"
       await ctx.reply(responses.finalText, {
         reply_markup: new Keyboard()
           .text("Завершить 🎉")
@@ -255,13 +251,11 @@ bot.hears("Готово ✅", async (ctx) => {
           .resized(),
       });
 
-      // Удаляем состояние пользователя
       delete userStates[userId];
     }
   }
 });
 
-// Обработка ошибок
 bot.catch((err) => {
   const ctx = err.ctx;
   console.error(`Error while handling update ${ctx.update.update_id}:`);
